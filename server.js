@@ -2,12 +2,18 @@ var express = require('express')
 
 // Create our app
 var app = express()
+const PORT = process.env.PORT || 3000
 
-app.use(express.static('public'))
-app.use(function(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000")
+app.use(function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] === 'http') {
+        next()
+    } else {
+        res.redirect('http://' + req.hostname + req.url)
+    }
 })
 
-app.listen(3000, function() {
-    console.log('Express servers is up on port 3000')
+app.use(express.static('public'))
+
+app.listen(PORT, function() {
+    console.log('Express servers is up on port ' + PORT)
 })

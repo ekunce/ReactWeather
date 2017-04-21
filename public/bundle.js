@@ -14229,8 +14229,8 @@ module.exports = {
         var requestUrl = OPEN_WEATHER_MAP_URL_START + 'q=' + encodedLocation + OPEN_WEATHER_MAP_URL_END;
 
         return axios.get(requestUrl).then(function (res) {
-            if (res.data.cod !== "200") {
-                throw new Error(res.data.message);
+            if (res.data.cod !== "200" || res.data.list.length === 0) {
+                throw new Error("City not found");
             } else {
                 return res.data.list[0].main.temp;
             }
